@@ -9,6 +9,8 @@ abstract class BaseRecyclerViewAdapter<viewBinding: ViewBinding, T> : RecyclerVi
     var delegate: BaseRecyclerViewAdapterDelegate<T>? = null
     var list = mutableListOf<T>()
 
+    open var isHeaderView: Boolean = false
+
     private var _binding: ViewBinding? = null
     abstract val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> viewBinding
 
@@ -33,5 +35,6 @@ abstract class BaseRecyclerViewAdapter<viewBinding: ViewBinding, T> : RecyclerVi
         delegate?.onDraw(list[position], position)
     }
 
-    override fun getItemCount() = list.size
+    override fun getItemCount() =
+        if (isHeaderView) 1 else list.size
 }
