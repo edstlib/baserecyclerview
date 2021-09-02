@@ -10,6 +10,7 @@ abstract class BaseRecyclerViewAdapter<viewBinding: ViewBinding, T> : RecyclerVi
     var list = mutableListOf<T>()
 
     open var isHeaderView: Boolean = false
+    open fun clickable() = true
 
     private var _binding: ViewBinding? = null
     abstract val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> viewBinding
@@ -28,8 +29,10 @@ abstract class BaseRecyclerViewAdapter<viewBinding: ViewBinding, T> : RecyclerVi
     }
 
     override fun onBindViewHolder(holder: BaseViewHolder<T>, position: Int) {
-        holder.itemView.setOnClickListener {
-            delegate?.onClick(list[position], position, holder)
+        if (clickable()) {
+            holder.itemView.setOnClickListener {
+                delegate?.onClick(list[position], position, holder)
+            }
         }
         holder.setData(list, position, delegate)
         delegate?.onDraw(list[position], position)
