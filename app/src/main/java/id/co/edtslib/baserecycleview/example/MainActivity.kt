@@ -29,8 +29,9 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        binding.recyclerView.layoutManager = LinearLayoutManager(this)
+        binding.recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         binding.recyclerView.adapter = adapter
+        binding.recyclerView.scrollToPosition(adapter.getInitialPosition())
 
     }
 }

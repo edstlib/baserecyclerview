@@ -12,6 +12,8 @@ abstract class BaseRecyclerViewAdapter<viewBinding: ViewBinding, T> : RecyclerVi
     open var isHeaderView: Boolean = false
     open fun clickable() = true
 
+    protected open fun isCircular() = false
+
     private var _binding: ViewBinding? = null
     abstract val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> viewBinding
 
@@ -29,15 +31,38 @@ abstract class BaseRecyclerViewAdapter<viewBinding: ViewBinding, T> : RecyclerVi
     }
 
     override fun onBindViewHolder(holder: BaseViewHolder<T>, position: Int) {
+        val newPosition = if (isCircular() && list.size > 1) {
+            position % list.size
+        }
+        else {
+            position
+        }
+
         if (clickable()) {
             holder.itemView.setOnClickListener {
-                delegate?.onClick(list[position], position, holder)
+                delegate?.onClick(list[newPosition], newPosition, holder)
             }
         }
-        holder.setData(list, position, delegate)
-        delegate?.onDraw(list[position], position)
+        holder.setData(list, newPosition, delegate)
+        delegate?.onDraw(list[newPosition], newPosition)
     }
 
     override fun getItemCount() =
-        if (isHeaderView) 1 else list.size
+        if (isCircular() && list.size > 1) {
+            Int.MAX_VALUE
+        }
+        else
+        if (isHeaderView) {
+            1
+        } else {
+            list.size
+        }
+
+    fun getInitialPosition(): Int {
+        return if (isCircular() && list.size > 1) {
+            itemCount / 2 - (itemCount/2) % list.size
+        } else {
+            0
+        }
+    }
 }

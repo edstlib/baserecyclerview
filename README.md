@@ -62,3 +62,17 @@ You can set a listener to be notified when the user click or draw a holder. An e
             }
         }
 ```
+
+### Circular Recycler View
+
+Please override isCircular function on your adapter class
+
+```kotlin
+    override fun isCircular() = true
+```
+
+and don't forget to scroll position your recycler first after set initial data
+
+```kotlin
+    binding.recyclerView.scrollToPosition(adapter.getInitialPosition())
+```
