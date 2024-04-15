@@ -1,5 +1,6 @@
 package id.co.edtslib.baserecyclerview
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -30,6 +31,7 @@ abstract class BaseRecyclerViewAdapter<viewBinding: ViewBinding, T> : RecyclerVi
         return createHolder()
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     override fun onBindViewHolder(holder: BaseViewHolder<T>, position: Int) {
         val newPosition = if (isCircular() && list.size > 1) {
             position % list.size
@@ -43,6 +45,9 @@ abstract class BaseRecyclerViewAdapter<viewBinding: ViewBinding, T> : RecyclerVi
                 holder.itemView.setOnClickListener {
                     if (newPosition in 0 until list.size) {
                         delegate?.onClick(list[newPosition], newPosition, holder)
+                    }
+                    else {
+                        notifyDataSetChanged()
                     }
                 }
             }
