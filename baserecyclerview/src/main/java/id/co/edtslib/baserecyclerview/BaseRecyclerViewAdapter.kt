@@ -41,7 +41,9 @@ abstract class BaseRecyclerViewAdapter<viewBinding: ViewBinding, T> : RecyclerVi
         if (newPosition in 0 until list.size) {
             if (clickable()) {
                 holder.itemView.setOnClickListener {
-                    delegate?.onClick(list[newPosition], newPosition, holder)
+                    if (newPosition in 0 until list.size) {
+                        delegate?.onClick(list[newPosition], newPosition, holder)
+                    }
                 }
             }
             holder.setData(list, newPosition, delegate)
